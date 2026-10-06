@@ -57,6 +57,7 @@ public class Grid {
     
     //checks if ship can be placed, returns true if able false if not
     public boolean canPlaceShip(int length, int xCoord, int yCoord, boolean orientation) {
+        //if out of bounds then also not valid place to put ship
         try {
             //checks if orientation is horizontal or vertical
             if (orientation == true) {
