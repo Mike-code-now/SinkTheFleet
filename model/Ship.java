@@ -14,16 +14,15 @@ public class Ship {
         this.numHits = 0;
     }
     
-    //Adds 1 to numHits. Returns true if succeeded, false if not
-    public boolean registerHit() {
+    //Adds 1 to numHits
+    public void registerHit() {
         this.numHits++;
-        ...
     }
     
     
-    //returns true if is sunk (numHits = length) false otherwise
+    //returns true if is sunk, false otherwise
     public boolean isSunk() {
-        return false;
+        return (numHits == length);
     }
     
     //returns the coordinates of all the cells where the ship is
