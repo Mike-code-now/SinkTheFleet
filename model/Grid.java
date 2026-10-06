@@ -1,10 +1,14 @@
 public class Grid {
     int player;
-    Ship [] ships;
-    Cell [] grid;
+    
+    //empty array of ships
+    Ship[] ships = new Ship[5];
+    
+    //the grid is an array divided first in the columns and inside divided in each cell in a single column aand diferent row
+    Cell [] grid = new Cell[10][10]
     
     //initialize grid with player 
-    public Grid(int player, Ship [] ships) {
+    public Grid(int player) {
         this.ships = ships;
         this.player = player;
         
@@ -37,6 +41,8 @@ public class Grid {
         
         //Creates a new Ship
         Ship x = new Ship(length, xCoord, yCoord, orientation);
+        
+        ships[shipNum] = x;
 
         //checks if orientation is horizontal or vertical
         if (orientation == true) {
@@ -57,7 +63,8 @@ public class Grid {
     
     //checks if ship can be placed, returns true if able false if not
     public boolean canPlaceShip(int length, int xCoord, int yCoord, boolean orientation) {
-        //if out of bounds then also not valid place to put ship
+        
+        //tries placing ship in the grid, if the placement is out of bounds retuns false
         try {
             //checks if orientation is horizontal or vertical
             if (orientation == true) {
@@ -86,16 +93,35 @@ public class Grid {
     //places shot, returns true if a boat is shoted or false if not
     public boolean placeShot(int xCoord, int yCoord) {
         
+        //marks cell as shoted
+        grid[xCoord][yCoord].isShot();
+        
+        //returns if a ship was shoted
+        return grid[xCoord][yCoord].hasShip();
     }
     
     //Checks if all the ships are placed through object ships
     public boolean shipsPlaced() {
         
+        //checks if list of ships has been completed
+        for (Ship ship:ships) {
+            if (ship == null) {
+                return false;
+            }
+        }
+        return true;
     }
     
     //Checks if all the ships are sunk through object ships
     public boolean shipsSunk() {
         
+        //checks if every ship has been sunked
+        for (Ship ship:ships) {
+            if (!ship.isSunk()) {
+                return false;
+            }
+        }
+        return true;
     }
     
     
