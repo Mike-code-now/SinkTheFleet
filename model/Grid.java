@@ -1,11 +1,23 @@
 public class Grid {
     int player;
     Ship [] ships;
-    Cell [] cells;
+    Cell [] grid;
     
     //initialize grid with player 
-    public Grid(int player) {
+    public Grid(int player, Ship [] ships) {
+        this.ships = ships;
+        this.player = player;
         
+        //the grid is an array divided first in the columns and inside divided in each cell in a single column aand diferent row
+        grid = new Cell[10][10];
+        
+        //creates each cell in the grid with the starting values
+        for(int i =  0; i < 10; i++) {
+            for(int j =  0; j < 10; j++){
+                Cell x = new Cell(false, 0);
+                grid[i][j] = x;
+            }
+        }
     }
     
     public int getPlayer() {
@@ -21,13 +33,54 @@ public class Grid {
     }
     
     //places ship and creates the Ship into object ships
-    public boolean placeShip(int xCoord, int yCoord, boolean orientation) {
+    public boolean placeShip(int length, int xCoord, int yCoord, boolean orientation, int shipNum) {
         
+        //checks if there's no other ships in any grid where the boat is being placed
+        if (grid.canPlaceShip(length, xCoord, yCoord, orientation) == true) {
+            
+            //Creates a new Ship
+            Ship x = new Ship(length, xCoord, yCoord, orientation);
+                    
+            //checks if orientation is horizontal or vertical
+            if (orientation == true) {
+            
+                //places the ship in its coordinates
+                for(int i = 0; i < length; i++) {
+                    grid[xCoord + i][yCoord].setShip(shipNum);
+                }
+            } else {
+
+                //places the ship in its coordinates
+                for(int j = 0; j < length; j++) {
+                    grid[xCoord][yCoord + j].setShip(shipNum);
+                }
+            }
+            
+        }
     }
     
     //checks if ship can be placed, true if able false if not
-    public boolean canPlaceShip(int xCoord, int yCoord, boolean orientation) {
+    public boolean canPlaceShip(int length, int xCoord, int yCoord, boolean orientation) {
         
+        //checks if orientation is horizontal or vertical
+        if (orientation == true) {
+            
+            //checks the coordinates where the ship will be placed
+            for(int i = 0; i < length; i++) {
+                if (grid[xCoord + i][yCoord].hasShip == true) {
+                    return false;
+                }
+            }
+        } else {
+            
+            //checks the coordinates where the ship will be placed
+            for(int j = 0; j < length; j++) {
+                if (grid[xCoord][yCoord + j].hasShip == true) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
     
     //places shot and return true if a boat is shoted or false if not
