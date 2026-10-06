@@ -2,31 +2,34 @@
 public class Cell {
     boolean hasShip = false;
     int shipNum = 0;
-    boolean IsShot = false  ;
+    boolean isShot = false;
     
     
     //Initializer
     public Cell(boolean ship, int number) {
-        pass
+        this.hasShip = ship;
+        this.shipNum = number;
+        this.isShot = false;
     }
     
     //returns true if cell has ship, false otherwise
     public boolean hasShip() {
-        return false;
+        return this.hasShip;
     }
     
-    //sets ship to cell. True if worked, false otherwise
-    public boolean setShip(int xCoordinate, int yCoordinate) {
-        return false;
+    //sets ship to cell
+    public void setShip(int num) {
+        this.hasShip = true;
+        this.shipNum = num;
     }
     
     //returns true if cell is shot. False otherwise
-    public boolean isShot(int xCoordinate, int yCoordinate) {
-        return false;
+    public boolean isShot() {
+        return this.isShot;
     }
     
-    //returns true if succeeded, false otherwise
-    public boolean markShot(int xCoordinate, int yCoordinate) {
-        return false;
+    //Sets a cell to shot if it has been shot
+    public void markShot() {
+        this.isShot = true;
     }
 }
