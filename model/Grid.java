@@ -1,14 +1,14 @@
 public class Grid {
-    int player;
+    Player player;
     
     //empty array of ships
     Ship[] ships = new Ship[5];
     
     //the grid is an array divided first in the columns and inside divided in each cell in a single column aand diferent row
-    Cell [] grid = new Cell[10][10]
+    Cell [][] grid = new Cell[10][10];
     
     //initialize grid with player 
-    public Grid(int player) {
+    public Grid(Player player) {
         this.ships = ships;
         this.player = player;
         
@@ -28,12 +28,12 @@ public class Grid {
         return this.player;
     }
     
-    public Ship getShips() {
+    public Ship[] getShips() {
         return this.ships;
     }
     
-    public Cell getCells() {
-        return this.cells;
+    public Cell[][] getCells() {
+        return this.grid;
     }
     
     //places ship and creates the Ship into object ships
@@ -117,16 +117,12 @@ public class Grid {
         return "MISS";
     }
         
-        
-        //returns if a ship was shoted
-        return false;
-    }
     
     //Checks if all the ships are placed through object ships
     public boolean shipsPlaced() {
         
         //checks if list of ships has been completed
-        for (Ship ship:ships) {
+        for (Ship ship: ships) {
             if (ship == null) {
                 return false;
             }
@@ -138,7 +134,7 @@ public class Grid {
     public boolean shipsSunk() {
         
         //checks if every ship has been sunked
-        for (Ship ship:ships) {
+        for (Ship ship: ships) {
             if (!ship.isSunk()) {
                 return false;
             }
@@ -146,5 +142,8 @@ public class Grid {
         return true;
     }
     
+    public Cell getCell(int xCoord, int yCoord) {
+        return grid[xCoord][yCoord];
+    }
     
 }
