@@ -89,15 +89,37 @@ public class Grid {
             return false;
         }
     }
-    
-    //places shot, returns true if a boat is shoted or false if not
-    public boolean placeShot(int xCoord, int yCoord) {
+
+    //returns false if this cell hasnt been shot yet, true if it has
+    public boolean checkShot(int xCoord, int yCoord) {
+        return grid[xCoord][yCoord].isShot();
+    }
         
-        //marks cell as shoted
-        grid[xCoord][yCoord].isShot();
+    //places shot, "HIT" if ship hit but not sunk, "SUNK" if sunk, "MISS" if hit water
+    public String placeShot(int xCoord, int yCoord) {
+        
+        //marks cell as shot
+        grid[xCoord][yCoord].markShot();
+
+        //if the cell has a ship
+        if (grid[xCoord][yCoord].hasShip()) {
+            
+            //gets the ship in that cell and adds 1 to hit.
+            Ship x = this.ships[grid[xCoord][yCoord].getShip()];
+            x.registerHit();
+
+            if (x.isSunk()) {
+                return "SUNK";
+            } else {
+                return "HIT";
+            }
+        }
+        return "MISS";
+    }
+        
         
         //returns if a ship was shoted
-        return grid[xCoord][yCoord].hasShip();
+        return false;
     }
     
     //Checks if all the ships are placed through object ships
