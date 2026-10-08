@@ -9,7 +9,6 @@ public class Grid {
     
     //initialize grid with player 
     public Grid(Player player) {
-        this.ships = ships;
         this.player = player;
         
         //the grid is an array divided first in the columns and inside divided in each cell in a single column aand diferent row
@@ -24,7 +23,7 @@ public class Grid {
         }
     }
     
-    public int getPlayer() {
+    public Player getPlayer() {
         return this.player;
     }
     
