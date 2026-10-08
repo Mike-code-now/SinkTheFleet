@@ -1,4 +1,3 @@
-
 public class Cell {
     boolean hasShip = false;
     int shipNum = 0;
@@ -31,5 +30,10 @@ public class Cell {
     //Sets a cell to shot if it has been shot
     public void markShot() {
         this.isShot = true;
+    }
+    
+    //returns the ship accosiated to the cell
+    public int getShip() {
+        return this.shipNum;
     }
 }
