@@ -1,7 +1,6 @@
 public class Player {
     String name;
     Grid grid;
-    boolean playing;
     
     //initilizer
     public Player(String name) {
@@ -17,11 +16,6 @@ public class Player {
     //returns the grid object of that player
     public Grid getGrid() {
         return this.grid;
-    }  
-    
-    //returns the grid object of that player
-    public Grid getPlaying() {
-        return this.playing;
     }  
     
 }
