@@ -94,7 +94,7 @@ public class Grid {
         return grid[xCoord][yCoord].isShot();
     }
         
-    //places shot, "HIT" if ship hit but not sunk, "SUNK" if sunk, "MISS" if hit water
+    //places shot, "HIT" if ship hit but not sunk, "HIT & SUNK" if sunk, "MISS" if hit water
     public String placeShot(int xCoord, int yCoord) {
         
         //marks cell as shot
@@ -108,7 +108,7 @@ public class Grid {
             x.registerHit();
 
             if (x.isSunk()) {
-                return "SUNK";
+                return "HIT & SUNK";
             } else {
                 return "HIT";
             }
@@ -129,7 +129,7 @@ public class Grid {
         return true;
     }
     
-    //Checks if all the ships are sunk through object ships
+    //Returns true if ships have been sunk or false if not
     public boolean shipsSunk() {
         
         //checks if every ship has been sunked
