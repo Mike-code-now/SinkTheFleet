@@ -2,34 +2,58 @@ public class Game {
     Player player1;
     Player player2;
     Player currentPlayer;
+    Player enemyPlayer;
     GamePhase phase;
     
     //Initilaizer
     public Game(Player p1, Player p2) {
         this.player1 = p1;
         this.player2 = p2;
-        this.currentPlayer = this.player1;
+        this.currentPlayer = player1;
+        this.enemyPlayer = player2;
     }
-    
+
+    //Setup phase
     //returns false if not all ships have been placed. if they have changes gamephase and then returns true
-    public boolean finishPlacement() {
+    public boolean finishPlacement(Grid grid) {
+
+        //if player has placed its ships switches turn and if both players have placed changes phase to PLAYING
+        if (currentPlayer.shipsPlaced()) {
+            if (currentPlayer == player1) {
+                currentPlayer = player2;
+                enemyPlayer = player1;
+            } else {
+                currentPlayer = player1;
+                enemyPlayer = player2;
+                phase = PLAYING;
+            }
+            return true;
+        }
         return false;
     }
-        // false if currentPlayer's grid.shipsPlaced() is false
-        // player 1 done → switchTurn, player 2 places next
-        // player 2 done → switchTurn back to player 1, phase = PLAYING
     
     
     // Playing phase
+    // returns "MISS", "HIT", "SUNK", "ALREADY_SHOT"
     public String fire(int x, int y) {
-        return "Hi";
+        Grid grid = enemyPlayer.getGrid();
+
+        if (grid.checkShot(x, y) == true) {
+            return "ALREADY SHOT";
+        }
+        
+        String shot = grid.placeShot(x, y);
+
+        //changes phase to FINISHED if all the enemy's ships have been sunk
+        if (grid.shipsSunk()) {
+            phase = FINISHED;
+        }
+
+        return shot;
+        
+        
+        
     }
-        // on the opponent's grid:
-        // checkShot is true → return "ALREADY_SHOT" and don't switch turn
-        // otherwise placeShot and keep its result
-        // opponent's shipsSunk() → phase = FINISHED, don't switch turn
-        // otherwise switchTurn
-        // return the result ("MISS", "HIT", "SUNK" or "ALREADY_SHOT")
     
         
         
@@ -54,18 +78,18 @@ public class Game {
         return this.phase;
     }
     
-    //returns null if game not over. a player if they won
-    public Player isOver() {
+    //returns "" if game not over or the player's name if they won
+    public String isOver() {
         
         //if all player1 ships are sunk
         if (player1.getGrid().shipsSunk()) {
-            return player2;
+            return player2.getName();
         
         } else if (player2.getGrid().shipsSunk()) {
-            return player1;
+            return player1.getName();
         }
         
-        return null;
+        return "";
     }
     
     private void switchTurn() {
