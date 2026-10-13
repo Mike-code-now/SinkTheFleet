@@ -19,6 +19,7 @@ public class Main_Game extends javax.swing.JFrame {
     private JButton[][] fleetButtons = new JButton[10][10];
     private JButton[][] enemyButtons = new JButton[10][10];
     private Game game;
+    private boolean orientation;
     
     /**
      * Creates new form NewJFrame
@@ -95,11 +96,33 @@ public class Main_Game extends javax.swing.JFrame {
 
     //Not work during setup. only during playing phase.
     private void enemyCellClicked(int x, int y) {
-        messageLabel.setText("Enemy clicked: " + x + ", " + y);   // test, remove later
 
-        // TODO: only do something during PLAYING
-        // TODO: fire at x, y and show the result in messageLabel
-        // TODO: redraw
+        if (this.game.getPhase() != GamePhase.PLAYING) {
+            messageLabel.setText("Cannot fire yet");
+            return;
+        }
+        
+        if (this.game.getOpponent().getGrid().checkShot(x,y)) {
+            messageLabel.setText("This cell has already been shot");
+            return;
+        }
+        
+        String result = this.game.fire(x,y);
+        
+        if (result.equals("MISS")) {
+            enemyButtons[x][y].setBackground(java.awt.Color.BLUE);
+            messageLabel.setText(result);
+            
+        } else if (result.equals("HIT")) {
+            enemyButtons[x][y].setBackground(java.awt.Color.RED);
+            messageLabel.setText(result);
+        
+        } else if (result.equals("HIT & SUNK")) {
+            enemyButtons[x][y].setBackground(java.awt.Color.RED);
+            messageLabel.setText(result);
+        }
+        
+        
     }
     
     //For when a click happens, the grid needs to be redrawn with new colourings.
