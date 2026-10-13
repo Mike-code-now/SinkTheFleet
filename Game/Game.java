@@ -3,6 +3,7 @@ public class Game {
     Player player2;
     Player currentPlayer;
     GamePhase phase;
+    boolean hasFired = false;
     
     //Initilaizer
     public Game(Player p1, Player p2) {
@@ -40,6 +41,11 @@ public class Game {
             return "ALREADY SHOT";
         }
         
+        //if player already fired
+        if (this.hasFired) {
+            return "ALREADY FIRED";
+        }
+        
         String shot = grid.placeShot(x, y);
 
         //changes phase to FINISHED if all the enemy's ships have been sunk
@@ -47,8 +53,8 @@ public class Game {
             phase =  GamePhase.FINISHED;
         }
         
-        switchTurn();
-
+        boolean hasFired = true;
+        
         return shot;
         
         
@@ -99,5 +105,7 @@ public class Game {
         } else {
             currentPlayer = player1;
         }
+        
+        boolean hasFired = false;
     }
 }
