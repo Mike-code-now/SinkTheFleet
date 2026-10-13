@@ -4,6 +4,8 @@
  */
 package com.mycompany.battleships;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author mikeg
@@ -17,6 +19,7 @@ public class Start extends javax.swing.JFrame {
      */
     public Start() {
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**
@@ -55,7 +58,7 @@ public class Start extends javax.swing.JFrame {
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 538, Short.MAX_VALUE)
                     .addComponent(StartGameButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(ShowLeaderboardButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(49, Short.MAX_VALUE))
+                .addContainerGap(52, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -66,14 +69,61 @@ public class Start extends javax.swing.JFrame {
                 .addComponent(StartGameButton, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(33, 33, 33)
                 .addComponent(ShowLeaderboardButton, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(49, Short.MAX_VALUE))
+                .addContainerGap(57, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    // returns the name, or null if the player cancelled
+    private String askName(String prompt) {
+        while (true) {
+            String name = JOptionPane.showInputDialog(this, prompt, "Player names",
+                                                      JOptionPane.QUESTION_MESSAGE);
+            if (name == null) {
+                return null;                  // Cancel or X was pressed
+            }
+            name = name.trim();
+            
+            
+            if (name.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Name can't be empty.");
+            
+            //To ensure it doesnt mess with the csv file.
+            } else if (name.contains(",")) { 
+                JOptionPane.showMessageDialog(this, "Name can't contain a comma.");
+            } else {
+                return name;
+            }
+        }
+    }
+    
+    
+    
     private void StartGameButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_StartGameButtonActionPerformed
-        // TODO add your handling code here:
+        String name1 = askName("Player 1, enter your name:");
+        String name2 = askName("Player 2, enter your name:");
+        
+        //If either player didnt enter their name then stay on start screen
+        if ((name1 == null) || (name2 == null)) {
+            JOptionPane.showMessageDialog(this, "One or both players pressed cancel");
+            return;
+        }   
+        
+        if (name1.equalsIgnoreCase(name2)) {
+            JOptionPane.showMessageDialog(this, "Players need different names.");
+            return;
+        }
+        
+        Game game = new Game(new Player(name1), new Player(name2));
+        
+        Main_Game screen = new Main_Game(game);
+        screen.setLocationRelativeTo(null);   // centre it on the screen
+        screen.setVisible(true);
+        this.dispose();
+        
+        
+        
     }//GEN-LAST:event_StartGameButtonActionPerformed
 
     private void ShowLeaderboardButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ShowLeaderboardButtonActionPerformed

@@ -18,10 +18,18 @@ public class Main_Game extends javax.swing.JFrame {
     //Initializes both fleets buttons
     private JButton[][] fleetButtons = new JButton[10][10];
     private JButton[][] enemyButtons = new JButton[10][10];
+    private Game game;
     
     /**
      * Creates new form NewJFrame
      */
+    public Main_Game(Game game) {
+        this();
+        this.game = game;
+        messageLabel.setText(game.getCurrentPlayer().getName() + ", place your ships");
+    }
+    
+    
     public Main_Game() {
         initComponents();
         buildGrids();
@@ -79,6 +87,7 @@ public class Main_Game extends javax.swing.JFrame {
     private void fleetCellClicked(int x, int y) {
         messageLabel.setText("Fleet clicked: " + x + ", " + y);   // test, remove later
         fleetButtons[x][y].setBackground(java.awt.Color.RED);
+        
         // TODO: only do something during SETUP
         // TODO: place the next ship at x, y
         // TODO: redraw
