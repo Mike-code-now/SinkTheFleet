@@ -2,7 +2,6 @@ public class Game {
     Player player1;
     Player player2;
     Player currentPlayer;
-    Player enemyPlayer;
     GamePhase phase;
     
     //Initilaizer
@@ -10,23 +9,22 @@ public class Game {
         this.player1 = p1;
         this.player2 = p2;
         this.currentPlayer = player1;
-        this.enemyPlayer = player2;
+        this.phase = GamePhase.SETUP;
     }
 
     //Setup phase
     //returns false if not all ships have been placed. if they have changes gamephase and then returns true
-    public boolean finishPlacement(Grid grid) {
+    public boolean finishPlacement() {
 
         //if player has placed its ships switches turn and if both players have placed changes phase to PLAYING
-        if (currentPlayer.shipsPlaced()) {
-            if (currentPlayer == player1) {
-                currentPlayer = player2;
-                enemyPlayer = player1;
+        if (currentPlayer.getGrid().shipsPlaced()) {
+            if (currentPlayer == player2) {
+                phase =  GamePhase.PLAYING;
             } else {
-                currentPlayer = player1;
-                enemyPlayer = player2;
-                phase = PLAYING;
+                switchTurn();
             }
+            
+            
             return true;
         }
         return false;
@@ -34,9 +32,9 @@ public class Game {
     
     
     // Playing phase
-    // returns "MISS", "HIT", "SUNK", "ALREADY_SHOT"
+    // returns "MISS", "HIT", "HIT & SUNK", "ALREADY_SHOT"
     public String fire(int x, int y) {
-        Grid grid = enemyPlayer.getGrid();
+        Grid grid = getOpponent().getGrid();
 
         if (grid.checkShot(x, y) == true) {
             return "ALREADY SHOT";
@@ -46,8 +44,10 @@ public class Game {
 
         //changes phase to FINISHED if all the enemy's ships have been sunk
         if (grid.shipsSunk()) {
-            phase = FINISHED;
+            phase =  GamePhase.FINISHED;
         }
+        
+        switchTurn();
 
         return shot;
         
@@ -91,14 +91,13 @@ public class Game {
         
         return "";
     }
-    
+    //switches turn
     private void switchTurn() {
         
-        if (this.currentPlayer == this.player1) {
-            this.currentPlayer = this.player2;
-        
+        if (currentPlayer == player1) {
+            currentPlayer = player2;
         } else {
-            this.currentPlayer = this.player1;
+            currentPlayer = player1;
         }
     }
 }
