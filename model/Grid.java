@@ -1,3 +1,5 @@
+package com.mycompany.battleships;
+
 public class Grid {
     Player player;
     
@@ -9,6 +11,7 @@ public class Grid {
     
     //initialize grid with player 
     public Grid(Player player) {
+        this.ships = ships;
         this.player = player;
         
         //the grid is an array divided first in the columns and inside divided in each cell in a single column aand diferent row
@@ -94,7 +97,7 @@ public class Grid {
         return grid[xCoord][yCoord].isShot();
     }
         
-    //places shot, "HIT" if ship hit but not sunk, "HIT & SUNK" if sunk, "MISS" if hit water
+    //places shot, "HIT" if ship hit but not sunk, "SUNK" if sunk, "MISS" if hit water
     public String placeShot(int xCoord, int yCoord) {
         
         //marks cell as shot
@@ -108,7 +111,7 @@ public class Grid {
             x.registerHit();
 
             if (x.isSunk()) {
-                return "HIT & SUNK";
+                return "SUNK";
             } else {
                 return "HIT";
             }
@@ -129,7 +132,7 @@ public class Grid {
         return true;
     }
     
-    //Returns true if ships have been sunk or false if not
+    //Checks if all the ships are sunk through object ships
     public boolean shipsSunk() {
         
         //checks if every ship has been sunked
