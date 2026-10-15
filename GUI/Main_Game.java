@@ -97,7 +97,13 @@ public class Main_Game extends javax.swing.JFrame {
     
     //when a button in the fleet clicked. Only needs to work during setup. Ignore during playing phase
     private void fleetCellClicked(int x, int y) {
-        messageLabel.setText("Fleet clicked: " + x + ", " + y);
+        
+        if (shipNum >= shipLength.length) {
+            messageLabel.setText("All ships placed. Press Switch Player.");
+            return;
+        }
+        
+        
         if (this.game.getPhase() == GamePhase.SETUP) {
             if (this.game.canPlaceShipInGrid(shipLength[shipNum], x, y, this.orientation, game.getCurrentPlayer())) {
                 for (int i = 0; i < shipLength[shipNum]; i++) {
@@ -118,8 +124,7 @@ public class Main_Game extends javax.swing.JFrame {
                 if (answer == javax.swing.JOptionPane.YES_OPTION) {
 
                     // Place the ship
-                    this.game.placeShipInGrid(shipLength[shipNum], x, y, this.orientation, shipNum, game.getCurrentPlayer());                
-                    shipNum++;
+                    this.game.placeShipInGrid(shipLength[shipNum], x, y, this.orientation, shipNum, game.getCurrentPlayer());
                     
                     // Change cells to gray
                     for (int i = 0; i < shipLength[shipNum]; i++) {
@@ -129,7 +134,7 @@ public class Main_Game extends javax.swing.JFrame {
                             fleetButtons[x][y + i].setBackground(java.awt.Color.GRAY);
                         }
                     }
-
+                    shipNum++;
                     messageLabel.setText("Ship placed!");
 
                 } else {
@@ -142,6 +147,7 @@ public class Main_Game extends javax.swing.JFrame {
                             fleetButtons[x][y + i].setBackground(java.awt.Color.BLUE);
                         }
                     }
+                }
 
             } else {
                 messageLabel.setText("Cannot place ship here!");
@@ -164,7 +170,7 @@ public class Main_Game extends javax.swing.JFrame {
             messageLabel.setText("This cell has already been shot");
             return;
         }
-        
+                
         //fires
         String result = this.game.fire(x,y);
         
@@ -177,14 +183,15 @@ public class Main_Game extends javax.swing.JFrame {
             enemyButtons[x][y].setBackground(java.awt.Color.RED);
             messageLabel.setText(result);
         
-        } else if (result.equals("HIT & SUNK")) {
+        } else if (result.equals("SUNK")) {
             enemyButtons[x][y].setBackground(java.awt.Color.RED);
-            messageLabel.setText(result);
+            messageLabel.setText("HIT & SUNK");
         
         } else if (result.equals("ALREADY FIRED")) {
             messageLabel.setText("You already fired. Press Switch Player.");
             return;
         }
+        enemyButtons[x][y].setText("X");
         
         //If game is finished then increment leaderboard, have popup saying who wins and then go back to start screen
         if (this.game.getPhase() == GamePhase.FINISHED) {
