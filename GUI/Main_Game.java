@@ -23,6 +23,7 @@ public class Main_Game extends javax.swing.JFrame {
     private Game game;
     private boolean orientation = true;
     private int shipNum = 0;
+    private int[] shipLength = {5, 4, 3, 3, 2};
     
     /**
      * Creates new form NewJFrame
@@ -96,14 +97,57 @@ public class Main_Game extends javax.swing.JFrame {
     
     //when a button in the fleet clicked. Only needs to work during setup. Ignore during playing phase
     private void fleetCellClicked(int x, int y) {
-        messageLabel.setText("Fleet clicked: " + x + ", " + y);   // test, remove later
-        fleetButtons[x][y].setText("X");
+        messageLabel.setText("Fleet clicked: " + x + ", " + y);
+        if (this.game.getPhase() == GamePhase.SETUP) {
+            if (this.game.canPlaceShipInGrid(shipLength[shipNum], x, y, this.orientation, game.getCurrentPlayer())) {
+                for (int i = 0; i < shipLength[shipNum]; i++) {
+                    if (orientation == true) {
+                        fleetButtons[x + i][y].setBackground(java.awt.Color.YELLOW);
+                    } else {
+                        fleetButtons[x][y + i].setBackground(java.awt.Color.YELLOW);
+                    }
+                }
+                // Ask the player to confirm
+                int answer = javax.swing.JOptionPane.showConfirmDialog(
+                    this,
+                    "Do you want to place this ship here?",
+                    "Confirm Ship",
+                    javax.swing.JOptionPane.YES_NO_OPTION
+                );
 
-        
-        
-        // TODO: only do something during SETUP
-        // TODO: place the next ship at x, y
-        // TODO: redraw
+                if (answer == javax.swing.JOptionPane.YES_OPTION) {
+
+                    // Place the ship
+                    this.game.placeShipInGrid(shipLength[shipNum], x, y, this.orientation, shipNum, game.getCurrentPlayer());                
+                    shipNum++;
+                    
+                    // Change cells to gray
+                    for (int i = 0; i < shipLength[shipNum]; i++) {
+                        if (orientation == true) {
+                            fleetButtons[x + i][y].setBackground(java.awt.Color.GRAY);
+                        } else {
+                            fleetButtons[x][y + i].setBackground(java.awt.Color.GRAY);
+                        }
+                    }
+
+                    messageLabel.setText("Ship placed!");
+
+                } else {
+
+                    // Restore blue colors
+                    for (int i = 0; i < shipLength[shipNum]; i++) {
+                        if (orientation == true) {
+                            fleetButtons[x + i][y].setBackground(java.awt.Color.BLUE);
+                        } else {
+                            fleetButtons[x][y + i].setBackground(java.awt.Color.BLUE);
+                        }
+                    }
+
+            } else {
+                messageLabel.setText("Cannot place ship here!");
+            }
+            
+        }
     }
 
     //Not work during setup. only during playing phase.
