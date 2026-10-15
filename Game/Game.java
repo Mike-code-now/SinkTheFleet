@@ -1,3 +1,13 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package com.mycompany.battleships;
+
+/**
+ *
+ * @author mikeg
+ */
 public class Game {
     Player player1;
     Player player2;
@@ -97,8 +107,9 @@ public class Game {
         
         return "";
     }
+    
     //switches turn
-    private void switchTurn() {
+    public void switchTurn() {
         
         if (currentPlayer == player1) {
             currentPlayer = player2;
@@ -106,6 +117,6 @@ public class Game {
             currentPlayer = player1;
         }
         
-        boolean hasFired = false;
+        this.hasFired = false;
     }
 }
