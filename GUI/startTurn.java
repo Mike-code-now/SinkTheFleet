@@ -11,13 +11,21 @@ package com.mycompany.battleships;
 public class startTurn extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(startTurn.class.getName());
-
+    private Main_Game mainGame;
+    
     /**
      * Creates new form startTurn
      */
     public startTurn() {
         initComponents();
     }
+    
+
+
+    public startTurn(Main_Game mainGame) {
+        this.mainGame = mainGame;
+        initComponents();
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -43,22 +51,23 @@ public class startTurn extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(25, 25, 25)
                 .addComponent(StartTurnButton, javax.swing.GroupLayout.PREFERRED_SIZE, 578, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(27, Short.MAX_VALUE))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(14, 14, 14)
                 .addComponent(StartTurnButton, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(14, Short.MAX_VALUE))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void StartTurnButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_StartTurnButtonActionPerformed
-        // TODO add your handling code here:
-        
+        mainGame.drawGrids();
+        mainGame.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_StartTurnButtonActionPerformed
 
     /**

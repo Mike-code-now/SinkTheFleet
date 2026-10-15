@@ -6,6 +6,8 @@ package com.mycompany.battleships;
 
 import javax.swing.JButton;
 import java.awt.GridLayout;
+import javax.swing.JOptionPane;
+
 
 /**
  *
@@ -19,7 +21,8 @@ public class Main_Game extends javax.swing.JFrame {
     private JButton[][] fleetButtons = new JButton[10][10];
     private JButton[][] enemyButtons = new JButton[10][10];
     private Game game;
-    private boolean orientation;
+    private boolean orientation = true;
+    private int shipNum = 0;
     
     /**
      * Creates new form NewJFrame
@@ -63,6 +66,10 @@ public class Main_Game extends javax.swing.JFrame {
                 fleetButtons[x][y].addActionListener(e -> fleetCellClicked(cx, cy));
                 enemyButtons[x][y].addActionListener(e -> enemyCellClicked(cx, cy));
                 
+                //set colour to blue
+                fleetButtons[x][y].setBackground(java.awt.Color.BLUE);
+                enemyButtons[x][y].setBackground(java.awt.Color.BLUE);
+                
                 //To set the colour of the buttons correctly
                 setupCell(fleetButtons[x][y]);
                 setupCell(enemyButtons[x][y]);
@@ -82,12 +89,17 @@ public class Main_Game extends javax.swing.JFrame {
         button.setContentAreaFilled(false);
         button.setOpaque(true);
         button.setFocusable(false);
+        button.setMargin(new java.awt.Insets(0, 0, 0, 0));          // no space around the text
+        button.setFont(new java.awt.Font("Monospaced", java.awt.Font.BOLD, 18));
+        button.setForeground(java.awt.Color.BLACK);
     }
     
     //when a button in the fleet clicked. Only needs to work during setup. Ignore during playing phase
     private void fleetCellClicked(int x, int y) {
         messageLabel.setText("Fleet clicked: " + x + ", " + y);   // test, remove later
-        fleetButtons[x][y].setBackground(java.awt.Color.RED);
+        fleetButtons[x][y].setText("X");
+
+        
         
         // TODO: only do something during SETUP
         // TODO: place the next ship at x, y
@@ -97,18 +109,22 @@ public class Main_Game extends javax.swing.JFrame {
     //Not work during setup. only during playing phase.
     private void enemyCellClicked(int x, int y) {
 
+        //Only continue if game phase == playing
         if (this.game.getPhase() != GamePhase.PLAYING) {
             messageLabel.setText("Cannot fire yet");
             return;
         }
         
+        //checks if cell has already been shot
         if (this.game.getOpponent().getGrid().checkShot(x,y)) {
             messageLabel.setText("This cell has already been shot");
             return;
         }
         
+        //fires
         String result = this.game.fire(x,y);
         
+        //logic for different results "HIT", "MISS" ETC
         if (result.equals("MISS")) {
             enemyButtons[x][y].setBackground(java.awt.Color.BLUE);
             messageLabel.setText(result);
@@ -120,20 +136,72 @@ public class Main_Game extends javax.swing.JFrame {
         } else if (result.equals("HIT & SUNK")) {
             enemyButtons[x][y].setBackground(java.awt.Color.RED);
             messageLabel.setText(result);
+        
+        } else if (result.equals("ALREADY FIRED")) {
+            messageLabel.setText("You already fired. Press Switch Player.");
+            return;
         }
         
-        
+        //If game is finished then increment leaderboard, have popup saying who wins and then go back to start screen
+        if (this.game.getPhase() == GamePhase.FINISHED) {
+            
+            //INCREMENT LEADERBOARD LOGIC NEEDS TO BE ADDED HERE
+            
+            
+            JOptionPane.showMessageDialog(this,
+            this.game.isOver() + " wins!",
+            "Game over",
+            JOptionPane.INFORMATION_MESSAGE);
+
+        // runs only after the popup is closed (OK or X)
+            Start start = new Start();
+            start.setLocationRelativeTo(null);
+            start.setVisible(true);
+            this.dispose(); 
+        }
     }
     
-    //For when a click happens, the grid needs to be redrawn with new colourings.
-    private void drawGrids() {
+    
+    
+    public void drawGrids() {
+        Grid grid1 = this.game.getCurrentPlayer().getGrid();
+        Grid grid2 = this.game.getOpponent().getGrid();
+        Cell ownCell;
+        Cell enemyCell;
+        
         for (int x = 0; x < 10; x++) {
             for (int y = 0; y < 10; y++) {
-                // TODO: look at the current player's cell at x, y
-                //       and setBackground on fleetButtons[x][y]
+                
+                //Set default colour & text
+                fleetButtons[x][y].setBackground(java.awt.Color.BLUE);
+                enemyButtons[x][y].setBackground(java.awt.Color.BLUE);
+                fleetButtons[x][y].setText("");
+                enemyButtons[x][y].setText("");
 
-                // TODO: look at the opponent's cell at x, y
-                //       and setBackground on enemyButtons[x][y]
+                
+                ownCell = grid1.getCell(x,y);
+                enemyCell = grid2.getCell(x,y);
+                 
+                //if has ship but isnt shot
+                if (ownCell.hasShip()) {
+                    fleetButtons[x][y].setBackground(java.awt.Color.GRAY);
+                }
+              
+                //if is shot adds x to that grid
+                if (ownCell.isShot()) {
+                    fleetButtons[x][y].setText("X");
+                }
+                 
+                //if enemy cell shot show something
+                if (enemyCell.isShot()) {
+                    if (enemyCell.hasShip()) {
+                        enemyButtons[x][y].setBackground(java.awt.Color.RED);
+                        enemyButtons[x][y].setText("X");
+                    } else {
+                        enemyButtons[x][y].setText("X");
+                    }
+                }
+                
             }
         }
     }
@@ -339,11 +407,50 @@ public class Main_Game extends javax.swing.JFrame {
 
     //For when switch button is used.
     private void SwitchPlayerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SwitchPlayerButtonActionPerformed
-        // TODO add your handling code here:
+        
+        // during setup, all ships must be placed before handing over
+        if (game.getPhase() == GamePhase.SETUP) { 
+            if (!game.getCurrentPlayer().getGrid().shipsPlaced()) {
+                messageLabel.setText("Place all your ships first");
+                return;
+            }
+            game.finishPlacement();     // switches to the other player (and starts the battle after player 2)
+            this.shipNum = 0; 
+            
+        } else if (game.getPhase() == GamePhase.PLAYING) {
+            
+            // during the battle, the player must have fired this turn
+            if (!game.hasFired) {
+                messageLabel.setText("Fire a shot first");
+                return;
+            }
+            
+            // switches to the other player & resets game.hasFired
+            game.switchTurn();
+
+            
+        // game is over, nothing to switch
+        } else {
+            return;
+        }
+        
+        // hide this window and show the handover screen
+        this.setVisible(false);
+        new startTurn(this).setVisible(true);   
     }//GEN-LAST:event_SwitchPlayerButtonActionPerformed
 
     private void RotateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RotateButtonActionPerformed
-        // TODO add your handling code here:
+        
+        //orienatoion is true if horizontal, false if vertical
+        if (this.orientation) {
+            this.orientation = false;
+            messageLabel.setText("The orientation is now down");
+        } else {
+            this.orientation = true;
+            messageLabel.setText("The orientation is now to the right   ");
+
+        }
+
     }//GEN-LAST:event_RotateButtonActionPerformed
 
     /**
