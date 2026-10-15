@@ -31,11 +31,9 @@ public class Game {
         if (currentPlayer.getGrid().shipsPlaced()) {
             if (currentPlayer == player2) {
                 phase =  GamePhase.PLAYING;
-            } else {
-                switchTurn();
             }
-            
-            
+                
+            switchTurn();
             return true;
         }
         return false;
@@ -63,7 +61,10 @@ public class Game {
             phase =  GamePhase.FINISHED;
         }
         
-        boolean hasFired = true;
+        // only a miss ends the turn; after a hit the player may fire again
+        if (shot.equals("MISS")) {
+            this.hasFired = true;
+        }        
         
         return shot;
         
