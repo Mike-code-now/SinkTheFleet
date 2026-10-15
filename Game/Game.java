@@ -119,4 +119,12 @@ public class Game {
         
         this.hasFired = false;
     }
+    //checks if can place ship in the grid
+    public boolean canPlaceShipInGrid(int length, int x, int y, boolean orientation, Player player) {
+        return player.getGrid().canPlaceShip(length, x, y, orientation);
+    }
+    //places ship in the grid
+    public boolean placeShipInGrid(int length, int x, int y, boolean orientation, int shipNum, Player player) {
+        return player.getGrid().placeShip(length, x, y, orientation, shipNum);
+    }
 }
