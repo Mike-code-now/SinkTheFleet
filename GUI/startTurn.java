@@ -4,6 +4,7 @@
  */
 package com.mycompany.battleships;
 
+
 /**
  *
  * @author mikeg

@@ -127,7 +127,10 @@ public class Start extends javax.swing.JFrame {
     }//GEN-LAST:event_StartGameButtonActionPerformed
 
     private void ShowLeaderboardButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ShowLeaderboardButtonActionPerformed
-        // TODO add your handling code here:
+        Leaderboard screen = new Leaderboard();
+        screen.setLocationRelativeTo(null);   // centre it on the screen
+        screen.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_ShowLeaderboardButtonActionPerformed
 
     /**
