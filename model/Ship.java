@@ -25,8 +25,4 @@ public class Ship {
         return (numHits == length);
     }
     
-    //returns the coordinates of all the cells where the ship is
-    public int[][] getPositions() {
-        ...
-    }
 }
