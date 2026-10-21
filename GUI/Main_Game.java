@@ -197,7 +197,7 @@ public class Main_Game extends javax.swing.JFrame {
         if (this.game.getPhase() == GamePhase.FINISHED) {
             
             //INCREMENT LEADERBOARD LOGIC NEEDS TO BE ADDED HERE
-            
+            Leaderboard.incrementWins(this.game.isOver());
             
             JOptionPane.showMessageDialog(this,
             this.game.isOver() + " wins!",
@@ -476,8 +476,13 @@ public class Main_Game extends javax.swing.JFrame {
                 return;
             }
             
+            
+            
+            
             // switches to the other player & resets game.hasFired
             game.switchTurn();
+            
+            
 
             
         // game is over, nothing to switch
@@ -485,9 +490,16 @@ public class Main_Game extends javax.swing.JFrame {
             return;
         }
         
+        //so new player doesnt have a previous message
+        messageLabel.setText("");
+        
         // hide this window and show the handover screen
         this.setVisible(false);
-        new startTurn(this).setVisible(true);   
+        
+        startTurn screen = new startTurn(this);
+        screen.setLocationRelativeTo(null);   // centre it on the screen
+        screen.setVisible(true);
+        
     }//GEN-LAST:event_SwitchPlayerButtonActionPerformed
 
     private void RotateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RotateButtonActionPerformed
