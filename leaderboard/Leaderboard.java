@@ -1,19 +1,239 @@
-package leaderboard;
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ */
+package com.mycompany.battleships;
+import java.nio.file.*;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
-// attributes
-private String filePath;                          // "leaderboard.txt"
-private ArrayList<LeaderboardEntry> entries;
 
-public Leaderboard(String filePath)               // constructor, starts with an empty list
-public void load()
-        // reads the file line by line, fromFileLine for each, adds to entries
-        // file doesn't exist yet → just keep the list empty
-public void save()
-        // writes every entry's toFileLine() to the file, one per line
-public void recordWin(String name)
-        // findEntry: found → addWin(), not found → add new entry with 1 win
-        // then save()
-public ArrayList<LeaderboardEntry> getSortedEntries()
-        // entries sorted by wins, most first
-private LeaderboardEntry findEntry(String name)
-        // compare with equalsIgnoreCase, return null if not found
+/**
+ *
+ * @author mikeg
+ */
+public class Leaderboard extends javax.swing.JFrame {
+    
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Leaderboard.class.getName());
+
+    /**
+     * Creates new form Leaderboard
+     */
+    public Leaderboard() {
+        initComponents();
+        displayWinners();
+    }
+
+    
+    //returns string of all names 
+    public static String[][] readFile() {
+        try {
+            String text = Files.readString(Path.of("leaderboard.txt")).trim();
+            String[] people = text.split("\\R");
+            String[][] result = new String[people.length][2];
+
+            for (int i = 0; i < people.length; i++) {
+                result[i] = people[i].split(",");
+            }
+
+            return result;
+        
+        //no file yet
+        } catch (IOException e) {
+        return new String[0][2];
+        }
+        
+            
+    }
+    
+    
+    public static void appendName(String name) {
+        try {
+            Files.writeString(Path.of("leaderboard.txt"), "\n" + name + ",1",
+                    StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+        } catch (IOException e) {
+            System.out.println("Could not write to leaderboard");
+        }
+}
+    
+    //not done
+    public static void incrementWins(String name) {
+        String[][] file = readFile();
+        int wins = checkName(name, file);
+        if (wins == 0) {
+            appendName(name);
+            return;
+        }
+        
+        // build the new file contents, with this player's wins + 1
+        StringBuilder sb = new StringBuilder();
+        
+        for (String[] entry : file) {
+            String entryName = entry[0].trim();
+            int entryWins = checkName(entryName, file);
+            if (entryName.equals(name.trim())) {
+                entryWins++;
+            }
+            sb.append(entryName).append(",").append(entryWins).append("\n");
+        }
+
+        try {
+            Files.writeString(Path.of("leaderboard.txt"), sb.toString().trim());
+        } catch (IOException e) {
+            System.out.println("Could not write to leaderboard: " + e.getMessage());
+        }
+        
+        
+    }
+    
+    
+    
+    
+    //returns number of wins if in file. otherwise 0.
+    public static int checkName(String name, String[][] list) {
+        for (String[] entry : list) {
+            if (entry[0].equals(name)) {
+                return Integer.parseInt(entry[1].trim());
+            }
+        }
+        return 0;
+    }
+    
+    //displays the table
+    public void displayWinners() {
+        String[][] list = readFile();
+        
+        // empty file gives one row with no wins column
+        if (list.length == 0 || list[0].length < 2) {
+            TextArea.setText("No winners yet.");
+            return;
+        }
+        
+        // sort by wins, highest first
+        for (int i = 0; i < list.length - 1; i++) {
+            for (int j = 0; j < list.length - 1 - i; j++) {
+                if (checkName(list[j][0], list) < checkName(list[j + 1][0], list)) {
+                    String[] temp = list[j];
+                    list[j] = list[j + 1];
+                    list[j + 1] = temp;
+                }
+            }
+        }
+
+        //formats the string
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.format("%-4s %-15s %5s%n", "#", "Name", "Wins"));
+        sb.append("---------------------------\n");
+
+        int rank = 1;
+        for (String[] entry : list) {
+            sb.append(String.format("%-4d %-15s %5d%n", rank++, entry[0], checkName(entry[0], list)));
+        }
+        sb.append("===========================");
+
+        TextArea.setText(sb.toString());
+    }
+    
+    
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jTextField1 = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        TextArea = new javax.swing.JTextArea();
+        jButton1 = new javax.swing.JButton();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jTextField1.setEditable(false);
+        jTextField1.setFont(new java.awt.Font("Monospaced", 1, 48)); // NOI18N
+        jTextField1.setText("Leaderboard");
+        jTextField1.addActionListener(this::jTextField1ActionPerformed);
+
+        TextArea.setEditable(false);
+        TextArea.setColumns(20);
+        TextArea.setFont(new java.awt.Font("Monospaced", 0, 14)); // NOI18N
+        TextArea.setRows(5);
+        jScrollPane1.setViewportView(TextArea);
+
+        jButton1.setText("Back");
+        jButton1.addActionListener(this::jButton1ActionPerformed);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(34, 34, 34)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jButton1)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jTextField1)
+                        .addComponent(jScrollPane1)))
+                .addContainerGap(34, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1)
+                .addGap(12, 12, 12))
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField1ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        Start start = new Start();
+        start.setLocationRelativeTo(null);
+        start.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
+            logger.log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(() -> new Leaderboard().setVisible(true));
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextArea TextArea;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextField jTextField1;
+    // End of variables declaration//GEN-END:variables
+}
