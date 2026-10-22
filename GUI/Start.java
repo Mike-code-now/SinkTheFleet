@@ -1,22 +1,14 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package com.mycompany.battleships;
 
 import javax.swing.JOptionPane;
 
-/**
- *
- * @author mikeg
- */
+/** Start screen where players start a game or open the leaderboard. */
 public class Start extends javax.swing.JFrame {
-    
+
+    // Netbeans generated
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Start.class.getName());
 
-    /**
-     * Creates new form Start
-     */
+    // Creates new form Start, centred on the screen.
     public Start() {
         initComponents();
         this.setLocationRelativeTo(null);
@@ -31,22 +23,22 @@ public class Start extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        StartGameButton = new javax.swing.JButton();
-        ShowLeaderboardButton = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
+        startGameButton = new javax.swing.JButton();
+        showLeaderboardButton = new javax.swing.JButton();
+        titleLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        StartGameButton.setFont(new java.awt.Font("Monospaced", 1, 36)); // NOI18N
-        StartGameButton.setText("Start Game");
-        StartGameButton.addActionListener(this::StartGameButtonActionPerformed);
+        startGameButton.setFont(new java.awt.Font("Monospaced", 1, 36)); // NOI18N
+        startGameButton.setText("Start Game");
+        startGameButton.addActionListener(this::startGameButtonActionPerformed);
 
-        ShowLeaderboardButton.setFont(new java.awt.Font("Monospaced", 1, 36)); // NOI18N
-        ShowLeaderboardButton.setText("Show Leaderboard");
-        ShowLeaderboardButton.addActionListener(this::ShowLeaderboardButtonActionPerformed);
+        showLeaderboardButton.setFont(new java.awt.Font("Monospaced", 1, 36)); // NOI18N
+        showLeaderboardButton.setText("Show Leaderboard");
+        showLeaderboardButton.addActionListener(this::showLeaderboardButtonActionPerformed);
 
-        jLabel1.setFont(new java.awt.Font("Monospaced", 1, 40)); // NOI18N
-        jLabel1.setText("WELCOME TO BATTLESHIPS");
+        titleLabel.setFont(new java.awt.Font("Monospaced", 1, 40)); // NOI18N
+        titleLabel.setText("WELCOME TO BATTLESHIPS");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -55,95 +47,87 @@ public class Start extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(43, 43, 43)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 538, Short.MAX_VALUE)
-                    .addComponent(StartGameButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(ShowLeaderboardButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(titleLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 538, Short.MAX_VALUE)
+                    .addComponent(startGameButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(showLeaderboardButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(52, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(29, 29, 29)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(titleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(StartGameButton, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(startGameButton, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(33, 33, 33)
-                .addComponent(ShowLeaderboardButton, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(showLeaderboardButton, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(57, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    // returns the name, or null if the player cancelled
+    /** Returns the name, or null if the player cancelled. */
     private String askName(String prompt) {
         while (true) {
             String name = JOptionPane.showInputDialog(this, prompt, "Player names",
-                                                      JOptionPane.QUESTION_MESSAGE);
+                    JOptionPane.QUESTION_MESSAGE);
             if (name == null) {
-                return null;                  // Cancel or X was pressed
+                return null; // Cancel or X was pressed.
             }
             name = name.trim();
-            
-            
+
             if (name.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Name can't be empty.");
-            
-            //To ensure it doesnt mess with the csv file.
-            } else if (name.contains(",")) { 
+
+            // To make sure it doesn't mess with the csv file.
+            } else if (name.contains(",")) {
                 JOptionPane.showMessageDialog(this, "Name can't contain a comma.");
             } else {
                 return name;
             }
         }
     }
-    
-    
-    
-    private void StartGameButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_StartGameButtonActionPerformed
+
+    /** Asks both players for their names and starts the game. */
+    private void startGameButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startGameButtonActionPerformed
         String name1 = askName("Player 1, enter your name:");
         String name2 = askName("Player 2, enter your name:");
-        
-        //If either player didnt enter their name then stay on start screen
+
+        // If either player didn't enter their name, stay on the start screen.
         if ((name1 == null) || (name2 == null)) {
             JOptionPane.showMessageDialog(this, "One or both players pressed cancel");
             return;
-        }   
-        
+        }
+
         if (name1.equalsIgnoreCase(name2)) {
             JOptionPane.showMessageDialog(this, "Players need different names.");
             return;
         }
-        
+
         Game game = new Game(new Player(name1), new Player(name2));
-        
-        Main_Game screen = new Main_Game(game);
-        screen.setLocationRelativeTo(null);   // centre it on the screen
+
+        MainGame screen = new MainGame(game);
+        screen.setLocationRelativeTo(null); // Centre it on the screen.
         screen.setVisible(true);
         this.dispose();
-        
-        
-        
-    }//GEN-LAST:event_StartGameButtonActionPerformed
+    }//GEN-LAST:event_startGameButtonActionPerformed
 
-    private void ShowLeaderboardButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ShowLeaderboardButtonActionPerformed
+    /** Opens the leaderboard. */
+    private void showLeaderboardButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showLeaderboardButtonActionPerformed
         Leaderboard screen = new Leaderboard();
-        screen.setLocationRelativeTo(null);   // centre it on the screen
+        screen.setLocationRelativeTo(null); // Centre it on the screen.
         screen.setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_ShowLeaderboardButtonActionPerformed
+    }//GEN-LAST:event_showLeaderboardButtonActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
+    // Opens only this screen (NetBeans template). The game starts from Battleships.main.
+    public static void main(String[] args) {
+        // Use the Nimbus look and feel if it is available.
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
         try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+            for (javax.swing.UIManager.LookAndFeelInfo info
+                    : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
@@ -154,13 +138,13 @@ public class Start extends javax.swing.JFrame {
         }
         //</editor-fold>
 
-        /* Create and display the form */
+        // Create and display the form.
         java.awt.EventQueue.invokeLater(() -> new Start().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton ShowLeaderboardButton;
-    private javax.swing.JButton StartGameButton;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JButton showLeaderboardButton;
+    private javax.swing.JButton startGameButton;
+    private javax.swing.JLabel titleLabel;
     // End of variables declaration//GEN-END:variables
 }

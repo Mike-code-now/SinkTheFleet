@@ -26,9 +26,9 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="43" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="jLabel1" pref="538" max="32767" attributes="0"/>
-                  <Component id="StartGameButton" alignment="0" max="32767" attributes="0"/>
-                  <Component id="ShowLeaderboardButton" alignment="0" max="32767" attributes="0"/>
+                  <Component id="titleLabel" pref="538" max="32767" attributes="0"/>
+                  <Component id="startGameButton" alignment="0" max="32767" attributes="0"/>
+                  <Component id="showLeaderboardButton" alignment="0" max="32767" attributes="0"/>
               </Group>
               <EmptySpace pref="52" max="32767" attributes="0"/>
           </Group>
@@ -38,18 +38,18 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
-              <Component id="jLabel1" min="-2" pref="119" max="-2" attributes="0"/>
+              <Component id="titleLabel" min="-2" pref="119" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="StartGameButton" min="-2" pref="70" max="-2" attributes="0"/>
+              <Component id="startGameButton" min="-2" pref="70" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
-              <Component id="ShowLeaderboardButton" min="-2" pref="70" max="-2" attributes="0"/>
+              <Component id="showLeaderboardButton" min="-2" pref="70" max="-2" attributes="0"/>
               <EmptySpace pref="57" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="javax.swing.JButton" name="StartGameButton">
+    <Component class="javax.swing.JButton" name="startGameButton">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Monospaced" size="36" style="1"/>
@@ -57,10 +57,10 @@
         <Property name="text" type="java.lang.String" value="Start Game"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="StartGameButtonActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="startGameButtonActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="ShowLeaderboardButton">
+    <Component class="javax.swing.JButton" name="showLeaderboardButton">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Monospaced" size="36" style="1"/>
@@ -68,10 +68,10 @@
         <Property name="text" type="java.lang.String" value="Show Leaderboard"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ShowLeaderboardButtonActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="showLeaderboardButtonActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JLabel" name="jLabel1">
+    <Component class="javax.swing.JLabel" name="titleLabel">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Monospaced" size="40" style="1"/>
