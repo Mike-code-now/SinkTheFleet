@@ -1,86 +1,89 @@
 package com.mycompany.battleships;
 
+/** A player's 10x10 grid with their cells and ships. */
 public class Grid {
-    Player player;
-    
-    //empty array of ships
-    Ship[] ships = new Ship[5];
-    
-    //the grid is an array divided first in the columns and inside divided in each cell in a single column aand diferent row
-    Cell [][] grid = new Cell[10][10];
-    
-    //initialize grid with player 
+
+    Player player; // Owner of this grid.
+
+    Ship[] ships = new Ship[5]; // Array of ships, empty until they are placed.
+
+    // The cells, divided first in columns and then in rows: grid[column][row].
+    Cell[][] grid = new Cell[10][10];
+
+    // Initializes the grid with the player.
     public Grid(Player player) {
-        this.ships = ships;
         this.player = player;
-        
-        //the grid is an array divided first in the columns and inside divided in each cell in a single column aand diferent row
+
         grid = new Cell[10][10];
-        
-        //creates each cell in the grid with the starting values
-        for(int i =  0; i < 10; i++) {
-            for(int j =  0; j < 10; j++){
+
+        // Creates each cell in the grid with the starting values.
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
                 Cell x = new Cell(false, 0);
                 grid[i][j] = x;
             }
         }
     }
-    
+
+    /** Returns the player this grid belongs to. */
     public Player getPlayer() {
         return this.player;
     }
-    
+
+    /** Returns the array of ships. */
     public Ship[] getShips() {
         return this.ships;
     }
-    
+
+    /** Returns all the cells of the grid. */
     public Cell[][] getCells() {
         return this.grid;
     }
-    
-    //places ship and creates the Ship into object ships
-    public boolean placeShip(int length, int xCoord, int yCoord, boolean orientation, int shipNum) {
-        
-        //Creates a new Ship
+
+    /** Places the ship and adds it to the array of ships. */
+    public boolean placeShip(int length, int xCoord, int yCoord, boolean orientation,
+            int shipNum) {
+
+        // Creates a new ship.
         Ship x = new Ship(length, xCoord, yCoord, orientation);
-        
+
         ships[shipNum] = x;
 
-        //checks if orientation is horizontal or vertical
+        // Checks if the orientation is horizontal or vertical.
         if (orientation == true) {
 
-            //places the ship in its coordinates
-            for(int i = 0; i < length; i++) {
+            // Places the ship in its coordinates.
+            for (int i = 0; i < length; i++) {
                 grid[xCoord + i][yCoord].setShip(shipNum);
             }
         } else {
 
-            //places the ship in its coordinates
-            for(int j = 0; j < length; j++) {
+            // Places the ship in its coordinates.
+            for (int j = 0; j < length; j++) {
                 grid[xCoord][yCoord + j].setShip(shipNum);
             }
         }
         return true;
     }
-    
-    //checks if ship can be placed, returns true if able false if not
+
+    /** Returns true if the ship can be placed here, false if not. */
     public boolean canPlaceShip(int length, int xCoord, int yCoord, boolean orientation) {
-        
-        //tries placing ship in the grid, if the placement is out of bounds retuns false
+
+        // Tries placing the ship in the grid. If it is out of bounds, returns false.
         try {
-            //checks if orientation is horizontal or vertical
+            // Checks if the orientation is horizontal or vertical.
             if (orientation == true) {
 
-                //checks the coordinates where the ship will be placed
-                for(int i = 0; i < length; i++) {
+                // Checks the coordinates where the ship will be placed.
+                for (int i = 0; i < length; i++) {
                     if (grid[xCoord + i][yCoord].hasShip == true) {
                         return false;
                     }
                 }
             } else {
 
-                //checks the coordinates where the ship will be placed
-                for(int j = 0; j < length; j++) {
+                // Checks the coordinates where the ship will be placed.
+                for (int j = 0; j < length; j++) {
                     if (grid[xCoord][yCoord + j].hasShip == true) {
                         return false;
                     }
@@ -92,21 +95,21 @@ public class Grid {
         }
     }
 
-    //returns false if this cell hasnt been shot yet, true if it has
+    /** Returns true if this cell has been shot, false if not. */
     public boolean checkShot(int xCoord, int yCoord) {
         return grid[xCoord][yCoord].isShot();
     }
-        
-    //places shot, "HIT" if ship hit but not sunk, "SUNK" if sunk, "MISS" if hit water
+
+    /** Places a shot: "HIT" if a ship is hit, "SUNK" if it sinks, "MISS" if it hits water. */
     public String placeShot(int xCoord, int yCoord) {
-        
-        //marks cell as shot
+
+        // Marks the cell as shot.
         grid[xCoord][yCoord].markShot();
 
-        //if the cell has a ship
+        // If the cell has a ship.
         if (grid[xCoord][yCoord].hasShip()) {
-            
-            //gets the ship in that cell and adds 1 to hit.
+
+            // Gets the ship in that cell and adds 1 to its hits.
             Ship x = this.ships[grid[xCoord][yCoord].getShip()];
             x.registerHit();
 
@@ -118,34 +121,33 @@ public class Grid {
         }
         return "MISS";
     }
-        
-    
-    //Checks if all the ships are placed through object ships
+
+    /** Returns true if all the ships are placed. */
     public boolean shipsPlaced() {
-        
-        //checks if list of ships has been completed
-        for (Ship ship: ships) {
+
+        // Checks if the array of ships is complete.
+        for (Ship ship : ships) {
             if (ship == null) {
                 return false;
             }
         }
         return true;
     }
-    
-    //Checks if all the ships are sunk through object ships
+
+    /** Returns true if all the ships are sunk. */
     public boolean shipsSunk() {
-        
-        //checks if every ship has been sunked
-        for (Ship ship: ships) {
+
+        // Checks if every ship has been sunk.
+        for (Ship ship : ships) {
             if (!ship.isSunk()) {
                 return false;
             }
         }
         return true;
     }
-    
+
+    /** Returns the cell at (xCoord, yCoord). */
     public Cell getCell(int xCoord, int yCoord) {
         return grid[xCoord][yCoord];
     }
-    
 }
